@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: ["master", "main"]
   workflow_dispatch:
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,7 +13,7 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -20,21 +21,20 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
+          pip install pytest netifaces scapy
       - name: Run tests
-        run: |
-          pytest tests/ -v --tb=short
+        run: pytest tests/ -v --tb=short
       - name: Generate test report
         if: always()
         run: |
           pytest tests/ --tb=short -q 2>&1 | tee test-report.txt
       - name: Upload test report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: test-report-py${{ matrix.python-version }}
           path: test-report.txt
           retention-days: 30
 
   ci:
-    uses: itsdarklikehell/ci-templates/.github/workflows/ci-python.yml@v1
+    uses: itsdarklikehell-interactive/ci-templates/.github/workflows/ci-python.yml@v1
