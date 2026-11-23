@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: ["master", "main"]
+    branches: ["master", "main", "chore/gha-updates"]
   pull_request:
     branches: ["master", "main"]
   workflow_dispatch:
